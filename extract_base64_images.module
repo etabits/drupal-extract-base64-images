@@ -1,0 +1,17 @@
+<?php
+
+function extract_base64_images_node_presave($node) {
+  $node->body[0]->value = preg_replace_callback('/data:image\/([a-zA-Z]+);base64,([^"]+)/', function($matches) {
+    if (!in_array($matches[1], array('png', 'jpeg', 'jpg', 'gif'))) {
+      // don't touch!
+      return $matches[0];
+    }
+
+    $contents = base64_decode($matches[2]);
+    $hash = hash('xxh128', $contents);
+    $filename = "image_{$hash}.{$matches[1]}";
+
+    $file = file_save_data($contents, 'public://'. $filename);
+    return file_create_url($file->getFileUri());
+  }, $node->body[0]->value);
+}

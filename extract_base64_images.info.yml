@@ -1,0 +1,7 @@
+name: 'Extract Base64 Images'
+type: module
+description: 'A pre-processor to extract embedded base64 images into files'
+core_version_requirement: ^9
+package: Custom
+dependencies:
+  - drupal:node
